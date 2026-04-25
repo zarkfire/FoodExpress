@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        System.out.println("APP STARTING...");
         BorderPane root = new BorderPane();
 
         // ================= DATA =================
@@ -119,11 +119,12 @@ public class Main extends Application {
 
         // ================= SCENE =================
         Scene scene = new Scene(root, 1200, 700);
-        scene.getStylesheets().add(
-                Objects.requireNonNull(
-                        getClass().getResource("/styles/style.css")
-                ).toExternalForm()
-        );
+        var css = getClass().getResource("/styles/style.css");
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        } else {
+            System.out.println("CSS NOT FOUND");
+        }
 
         stage.setTitle("Food Delivery App");
         stage.setScene(scene);

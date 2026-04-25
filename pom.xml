@@ -13,12 +13,9 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>21</javafx.version>
+        <javafx.version>21.0.11  </javafx.version>
     </properties>
 
-    <!-- ===================== -->
-    <!-- DEPENDENCIES -->
-    <!-- ===================== -->
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -33,13 +30,8 @@
         </dependency>
     </dependencies>
 
-    <!-- ===================== -->
-    <!-- BUILD -->
     <build>
-        <directory>${project.basedir}/build</directory>
         <plugins>
-
-            <!-- JAVA COMPILER -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -49,7 +41,63 @@
                 </configuration>
             </plugin>
 
-            <!-- JAVAFX RUN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.example.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.example.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-runtime-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -59,28 +107,29 @@
                 </configuration>
             </plugin>
 
-            <!-- PACKAGE CLEAN jpackage -->
+            <!-- Plugin jpackage corrigé -->
             <plugin>
                 <groupId>org.panteleyev</groupId>
                 <artifactId>jpackage-maven-plugin</artifactId>
                 <version>1.6.0</version>
-
                 <configuration>
                     <name>TP9App</name>
                     <appVersion>1.0</appVersion>
-
-                    <!-- IMPORTANT : dossier séparé pour éviter boucle target -->
+                    <vendor>YourName</vendor>
                     <input>${project.build.directory}</input>
-                    <destination>${project.build.directory}/installer</destination>
-
-                    <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
+                    <destination>${project.basedir}/dist</destination>
+                    <mainJar>${project.build.finalName}.jar</mainJar>
                     <mainClass>org.example.Main</mainClass>
-
                     <type>APP_IMAGE</type>
+                    <javaOptions>
+                        <javaOption>--module-path</javaOption>
+                        <javaOption>$APPDIR\\lib</javaOption>
+                        <javaOption>--add-modules</javaOption>
+                        <javaOption>javafx.controls,javafx.fxml</javaOption>
+                    </javaOptions>
+                    <runtimeImage>${java.home}</runtimeImage>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
