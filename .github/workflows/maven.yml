@@ -7,9 +7,6 @@
 # documentation.
 
 name: Java CI with Maven
-permissions:
-  contents: write
-  security-events: write
 on:
   push:
     branches: [ "main" ]
