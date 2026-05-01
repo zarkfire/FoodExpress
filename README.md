@@ -33,14 +33,15 @@ Elle propose un menu interactif, un système de panier, des filtres avancés et 
 ---
 
 ## 🏗️ Architecture
-
+```
 org.example
 ├── controller
+│   ├── MenuController.java
+│   └── CartController.java
 ├── model
-├── service
-├── storage
-├── ui
-└── Main.j
+│   └── Item.java
+└── Main.java
+```
 ---
 
 ## 💾 Persistance (Gson)
