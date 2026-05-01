@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.animation.FadeTransition;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -18,7 +19,6 @@ import java.util.function.Consumer;
  * Composants UI de l'application FoodExpress.
  */
 public class UIComponents {
-
     // ===================== TOP BAR =====================
 
     public static HBox createTopBar(TextField searchField) {
@@ -88,8 +88,11 @@ public class UIComponents {
         return scrollPane;
     }
 
-    public static void updateFoodList(ScrollPane scrollPane, List<FoodItem> foods) {
-
+    public static void updateFoodList(
+            ScrollPane scrollPane,
+            List<FoodItem> foods,
+            Consumer<FoodItem> onAdd
+    ){
         TilePane grid = (TilePane) scrollPane.getContent();
         grid.getChildren().clear();
 
@@ -103,10 +106,7 @@ public class UIComponents {
             Label price = new Label(item.getPrice() + " €");
 
             Button add = new Button("Ajouter");
-
-            add.setOnAction(e ->
-                    CartService.getInstance().addItem(item)
-            );
+            add.setOnAction(e -> onAdd.accept(item));
 
             card.getChildren().addAll(name, price, add);
             grid.getChildren().add(card);
@@ -123,7 +123,13 @@ public class UIComponents {
 
     // ===================== CART =====================
 
-    public static VBox createCart() {
+    public static VBox createCart(
+            ObservableList<CartItem> items,
+            Runnable onClear,
+            Consumer<CartItem> onIncrement,
+            Consumer<CartItem> onDecrement,
+            Consumer<CartItem> onRemove
+    ) {
 
         VBox cart = new VBox(12);
         cart.getStyleClass().add("cart");
@@ -199,7 +205,7 @@ public class UIComponents {
                     delete.setStyle(btnStyle + "-fx-background-color: #ff4b2b; -fx-text-fill: white;");
 
                     plus.setOnAction(e -> {
-                        item.increment();
+                        onIncrement.accept(item);
                         list.refresh();
                         updateTotal.run();
                     });
@@ -208,7 +214,7 @@ public class UIComponents {
                         item.decrement();
 
                         if (item.getQuantity() <= 0) {
-                            CartService.getInstance().removeItem(item);
+                            onRemove.accept(item);
                         }
 
                         list.refresh();
@@ -216,7 +222,7 @@ public class UIComponents {
                     });
 
                     delete.setOnAction(e -> {
-                        CartService.getInstance().removeItem(item);
+                        onRemove.accept(item);
                         list.refresh();
                         updateTotal.run();
                     });

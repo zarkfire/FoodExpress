@@ -5,6 +5,8 @@ module org.example.tp9mvn {
 
     // ✔ IMPORTANT : ton Main est ici
     exports org.example;
+    exports org.example.model;
+    exports org.example.service;
 
     opens org.example to javafx.graphics;
 

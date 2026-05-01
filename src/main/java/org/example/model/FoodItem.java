@@ -5,10 +5,10 @@ package org.example.model;
  */
 public class FoodItem {
 
-    private String name;
-    private double price;
-    private Category category;
-    private FoodSubtype subtype;
+    private final String name;
+    private final double price;
+    private final Category category;
+    private final FoodSubtype subtype;
 
     public FoodItem(String name, double price, Category category, FoodSubtype subtype) {
         this.name = name;

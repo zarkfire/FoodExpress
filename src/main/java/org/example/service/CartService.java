@@ -9,7 +9,7 @@ public class CartService {
 
     private static final CartService instance = new CartService();
 
-    private ObservableList<CartItem> items = FXCollections.observableArrayList();
+    private final ObservableList<CartItem> items = FXCollections.observableArrayList();
 
     public static CartService getInstance() {
         return instance;

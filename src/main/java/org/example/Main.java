@@ -2,18 +2,18 @@ package org.example;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
+import org.example.controller.CartController;
 import org.example.model.Category;
 import org.example.model.FoodItem;
 import org.example.model.FoodSubtype;
+import org.example.service.CartService;
 import org.example.service.FoodService;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Main extends Application {
 
@@ -81,7 +81,13 @@ public class Main extends Application {
 
                     .toList();
 
-            UIComponents.updateFoodList(foodScrollPane, filtered);
+            CartController cartController = new CartController(CartService.getInstance());
+
+            UIComponents.updateFoodList(
+                    foodScrollPane,
+                    filtered,
+                    cartController::addItem
+            );
         };
 
         // ================= SEARCH =================
@@ -115,7 +121,16 @@ public class Main extends Application {
         root.setTop(UIComponents.createTopBar(searchField));
         root.setLeft(leftPanel);
         root.setCenter(foodScrollPane);
-        root.setRight(UIComponents.createCart());
+        CartService cartService = CartService.getInstance();
+        CartController cartController = new CartController(cartService);
+
+        root.setRight(UIComponents.createCart(
+                cartController.getItems(),
+                cartController::clear,
+                cartController::increment,
+                cartController::decrement,
+                cartController::removeItem
+        ));
 
         // ================= SCENE =================
         Scene scene = new Scene(root, 1200, 700);

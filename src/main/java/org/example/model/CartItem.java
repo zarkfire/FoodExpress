@@ -1,7 +1,7 @@
 package org.example.model;
 
 public class CartItem {
-    private FoodItem item;
+    private final FoodItem item;
     private int quantity;
 
     public CartItem(FoodItem item) {
