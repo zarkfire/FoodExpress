@@ -26,11 +26,11 @@ public class CartController {
     }
 
     public void increment(CartItem item) {
-        item.increment();
+        cartService.increment(item);
     }
 
     public void decrement(CartItem item) {
-        item.decrement();
+        cartService.decrement(item);
         if (item.getQuantity() <= 0) {
             cartService.removeItem(item);
         }

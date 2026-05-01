@@ -44,13 +44,13 @@ public class FoodService {
         return foods.stream()
                 .filter(f -> query == null
                         || query.isBlank()
-                        || f.getName().toLowerCase().contains(query.toLowerCase()))
+                        || f.name().toLowerCase().contains(query.toLowerCase()))
 
                 .filter(f -> category == null
-                        || f.getCategory() == category)
+                        || f.category() == category)
 
                 .filter(f -> subtype == null
-                        || f.getSubtype() == subtype)
+                        || f.subtype() == subtype)
 
                 .toList();
     }

@@ -14,18 +14,19 @@ public class CartItem {
     }
 
     public void decrement() {
-        if (quantity > 1) quantity--;
+       quantity--;
+
     }
 
     public FoodItem getItem() { return item; }
     public int getQuantity() { return quantity; }
 
     public double getTotal() {
-        return item.getPrice() * quantity;
+        return item.price() * quantity;
     }
 
     @Override
     public String toString() {
-        return item.getName() + " x" + quantity + " = " + getTotal() + "€";
+        return item.name() + " x" + quantity;
     }
 }

@@ -15,6 +15,7 @@ public enum FoodSubtype {
     MARGHERITA,
     FOUR_CHEESE,
     PEPPERONI,
+    JOCELYN,
 
     // SUSHI
     MAKI,
